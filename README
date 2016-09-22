@@ -1,0 +1,3 @@
+This project is not using any unit test framework, due to short time and unfamiliarity of C unit test.
+I just used TEST_function in the main file to test functionalty.  Then follow by real function code.  compile; test
+Then check in.
