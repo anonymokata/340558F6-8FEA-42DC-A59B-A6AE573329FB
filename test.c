@@ -13,6 +13,7 @@ struct roman_table romanTable = {"IVXLCDM", {1, 5, 10, 50, 100, 500, 1000}};
 int is_inRomanLetter(char);
 bool valid_romanstring(char *);
 int toValue(char *);
+char *toRomanStr(int);
 
 void TEST_is_inRomanLetter(void)
 {
@@ -29,11 +30,22 @@ void TEST_valid_romanstring(void)
 void TEST_toValue(void)
 {
      assert(toValue("IV") == 4);
-     assert(toValue("Ix") == 9);
+     assert(toValue("IX") == 9);
      assert(toValue("XCIX") == 99);
      assert(toValue("CMCDXLIX") == 1349);
      assert(toValue("MCCCXLIX") == 1349);
 }
+
+void TEST_toRomanStr(void)
+{
+     char *rstr = toRomanStr(3999);
+     assert(strcmp(rstr, "MMMCMXCIX")==0);
+     free(rstr);
+     rstr = toRomanStr(444);
+     assert(strcmp(rstr, "CDXLIV") == 0);
+     free( rstr);
+}
+
 /////////////////////////////////////
 /**
 ** return index of letter in roman_letters[]
@@ -79,6 +91,39 @@ int toValue(char *str)
     return rv;
 }
 
+char *toRomanStr(int n)
+{
+     char *retstr = malloc(100);
+     int len = 0;
+     if (n <=0 || n > 3999) {
+         retstr[0] = '\0';
+         return retstr;
+     }
+#define append(c) retstr[len++] = c;
+     while(n>= 1000) { 
+         n -= 1000;
+         retstr[len++]='M'; 
+         printf("remain n: %d, len = %d\n", n, len);
+     }
+     if (n >= 900)   { n -= 900; append('C'); append('M'); };
+     if (n >= 500)   { n -= 500; append('D'); };
+     if (n >= 400)   { n -= 400; append('C'); append('D'); };
+     while (n >= 100){ n -= 100; append('C'); };
+ 
+     if (n >= 90)    { n -= 90;  append('X'); append('C'); };
+     if (n >= 50)    { n -= 50;  append('L'); };
+     if (n >= 40)    { n -= 40;  append('X'); append('L'); };
+     while (n >= 10) { n -= 10;  append('X'); };
+ 
+     if (n >= 9)     { n -= 9;   append('I'); append('X'); };
+     if (n >= 5)     { n -= 5;   append('V'); };
+     if (n >= 4)     { n -= 4;   append('I'); append('V'); };
+     while (n)       { n--; append('I'); };
+     append('\0');
+#undef append
+     
+    return retstr;
+}
 /*
 char *radd( char *r1, char *r2)
 {
@@ -104,5 +149,6 @@ int main(int argc, char *argv[])
     TEST_is_inRomanLetter();
     TEST_valid_romanstring();
     TEST_toValue();
+    TEST_toRomanStr();
     return 0;
 }
