@@ -14,6 +14,8 @@ int is_inRomanLetter(char);
 bool valid_romanstring(char *);
 int toValue(char *);
 char *toRomanStr(int);
+char *radd( char *, char *);
+char *rsub( char *, char *);
 
 void TEST_is_inRomanLetter(void)
 {
@@ -44,6 +46,17 @@ void TEST_toRomanStr(void)
      rstr = toRomanStr(444);
      assert(strcmp(rstr, "CDXLIV") == 0);
      free( rstr);
+}
+
+void TEST_radd(void)
+{
+     char *str = radd("XC", "IV");
+     assert(strcmp(str, "XCIV") == 0);
+}
+void TEST_rsub(void)
+{
+     char *str = rsub("XC", "IV");
+     assert(strcmp(str, "LXXXVI") == 0);
 }
 
 /////////////////////////////////////
@@ -124,17 +137,20 @@ char *toRomanStr(int n)
      
     return retstr;
 }
-/*
+
 char *radd( char *r1, char *r2)
 {
-     
+     int rv = toValue(r1) + toValue(r2);
+     printf("radd ret: %d\n", rv);
+     return (toRomanStr(rv));   
 }
 
-char *sub( char *r1, char *r2)
+char *rsub( char *r1, char *r2)
 {
-     
+     int rv = toValue(r1) - toValue(r2);
+     printf("rsub ret: %d\n", rv);
+     return (toRomanStr(rv));    
 }
-*/
 
 
 int main(int argc, char *argv[])
@@ -150,5 +166,7 @@ int main(int argc, char *argv[])
     TEST_valid_romanstring();
     TEST_toValue();
     TEST_toRomanStr();
+    TEST_radd();
+    TEST_rsub();
     return 0;
 }
