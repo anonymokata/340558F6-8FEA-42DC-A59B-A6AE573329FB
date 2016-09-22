@@ -29,7 +29,7 @@ void TEST_valid_romanstring(void)
 void TEST_toValue(void)
 {
      assert(toValue("IV") == 4);
-     assert(toValue("IX") == 9);
+     assert(toValue("Ix") == 9);
      assert(toValue("XCIX") == 99);
      assert(toValue("CMCDXLIX") == 1349);
      assert(toValue("MCCCXLIX") == 1349);
@@ -57,12 +57,6 @@ bool valid_romanstring(char *str)
      return rv;
 }
 
-//in place conversion
-void to_upper(char **s)
-{
-     for (int i = 0; i < strlen(*s); i++)
-         *s[i] &= (char)0xD0;        //remove bit5
-}
 int process_state(int currN, int lastN, int val)
 {
     if (currN < lastN)
@@ -76,9 +70,8 @@ int toValue(char *str)
     int lastNumber = 0;
     int tmpI = 0;
     int len = strlen(str);
-    //to_upper(&str);
     for (int i = len-1; i >= 0; i--) {
-        int c2i = is_inRomanLetter(str[i]);
+        int c2i = is_inRomanLetter(str[i]& 0xdf);
         rv = process_state(romanTable.value[c2i], lastNumber, rv);
         lastNumber = romanTable.value[c2i];
     }
